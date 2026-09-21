@@ -1,1 +1,118 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAFTA AGENT</title><script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><style>*{box-sizing:border-box;font-family:sans-serif}body{margin:0;background:#faf7f2;display:flex;justify-content:center}.phone{max-width:430px;width:100%;min-height:100vh;background:#faf7f2}.header{background:#0c0c0c;color:#FFC600;padding:20px;border-radius:0 0 24px 24px}.stats{display:flex;gap:10px;padding:15px;margin-top:-18px}.sbox{flex:1;background:#fdf0e1;border-radius:16px;padding:12px}.sbox strong{font-size:20px;display:block}.card{background:#fff;border-radius:20px;margin:12px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,.06)}label{font-size:11px;font-weight:800;color:#555;display:block;margin-top:12px}input{width:100%;padding:12px;margin:4px 0 8px;border-radius:10px;border:1.5px solid #ddd}.btn{width:100%;background:#FFC600;border:none;padding:14px;border-radius:12px;font-weight:900;margin-top:10px;cursor:pointer}.btn2{background:#000;color:#FFC600}#reader{width:100%;border-radius:12px;overflow:hidden;margin-top:10px;display:none}.qr{background:#fff;border-radius:14px;margin:8px 12px;padding:12px;display:flex;justify-content:space-between;align-items:center}</style></head><body><div class="phone"><div class="header"><h1>RAFTA AGENT APP</h1><p>Google Pay Jaisa Activation</p></div><div class="stats"><div class="sbox"><b>Total Activated</b><strong id="t1">0 QRs</strong></div><div class="sbox"><b>Today</b><strong id="t2">0</strong></div></div><div class="card"><h2 style="text-align:center;margin:0">📷 QR Scan Karke Activate Karo</h2><button class="btn btn2" onclick="startScan()" id="scanBtn">📷 SCAN QR - CAMERA KHOLO</button><div id="reader"></div><div id="scanOk" style="text-align:center;color:green;font-weight:bold;margin-top:8px"></div><label>QR ID *</label><input id="qr" placeholder="Scan se auto ayega"><label>Vehicle No *</label><input id="vehicle" placeholder="BR01AB1234"><label>Mobile No *</label><input id="mobile" placeholder="9876543210"><label>Kaam Kya Karte Hai *</label><input id="work" placeholder="Doctor / Business / Teacher"><label>WhatsApp No *</label><input id="wano" placeholder="Jispe msg jayega"><button class="btn" onclick="activate()">⚡ ACTIVATE KARO</button><div id="res"></div></div><div style="padding:10px 15px"><b>Activated List:</b></div><div id="list"></div></div><script>let db=JSON.parse(localStorage.getItem('rafta_final')||'{}');let qrScanner;function startScan(){let r=document.getElementById('reader');r.style.display='block';qrScanner=new Html5Qrcode("reader");qrScanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{let id=txt;try{let u=new URL(txt);id=u.searchParams.get('qr')||u.searchParams.get('id')||txt}catch{}id=(id.match(/RAFTA\d+/i)?.[0]||id).toUpperCase().trim();qr.value=id;scanOk.innerText="✅ SCAN HO GAYA: "+id;qrScanner.stop();r.style.display='none';},()=>{}).catch(e=>alert("Camera error: "+e))}function activate(){let q=qr.value.toUpperCase().trim(),v=vehicle.value.trim(),m=mobile.value.replace(/\D/g,'').slice(-10),wk=work.value.trim(),wa=wano.value.replace(/\D/g,'').slice(-10);if(!q||!v||!m||!wk||!wa)return alert("5 field bharo bhai");let waLink=`https://wa.me/91${wa}?text=Namaste! Aapki Gaadi ${encodeURIComponent(v)} (${q}) parking issue hai. Owner Mob: ${m} (${wk}) - RAFTA`;db[q]={vehicle:v,mobile:m,work:wk,whatsapp:wa,waLink:waLink,time:Date.now(),date:new Date().toLocaleDateString()};localStorage.setItem('rafta_final',JSON.stringify(db));localStorage.setItem('rafta',JSON.stringify(db));localStorage.setItem('rafta_v3',JSON.stringify(db));res.innerHTML=`<div style="background:#d1fae5;padding:12px;border-radius:12px;margin-top:12px;text-align:center"><b>✅ ${q} LIVE HO GAYA!</b><br><small>${v} | ${m} | ${wk}</small><br><a href="index.html?qr=${q}" target="_blank" style="background:#000;color:#FFC600;padding:6px 12px;border-radius:8px;text-decoration:none;display:inline-block;margin-top:8px">TEST SCAN</a></div>`;render()}function render(){let k=Object.keys(db).reverse();t1.innerText=k.length+" QRs";t2.innerText=k.length;let h="";k.forEach(id=>{let d=db[id];h+=`<div class=qr><div><b>${id}</b> - ${d.vehicle}<br><small>📱${d.mobile} | 💼${d.work} | 💬${d.whatsapp}</small></div><button onclick="delete db['${id}'];localStorage.setItem('rafta_final',JSON.stringify(db));localStorage.setItem('rafta',JSON.stringify(db));render()" style="background:#fee2e2;border:none;padding:6px 8px;border-radius:8px">🗑️</button></div>`});list.innerHTML=h||'<p style="text-align:center;color:#888">Koi QR active nahi</p>'}render()</script></body></html>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAFTA SCANNER</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;font-family:sans-serif}
+body{margin:0;background:#000;display:flex;justify-content:center}
+.phone{max-width:420px;width:100%;background:#f5f5f0;min-height:100vh}
+.header{background:#0a0a0a;color:#FFC600;padding:20px;text-align:center}
+#reader{width:100%;height:380px;background:#000;position:relative}
+#reader video{width:100%!important;height:100%!important;object-fit:cover!important}
+.card{background:#fff;border-radius:20px;margin:-20px 14px 14px;padding:18px;position:relative;z-index:2}
+input,select{width:100%;padding:12px;margin:5px 0 8px;border-radius:10px;border:1.5px solid #ddd}
+label{font-size:11px;font-weight:800;display:block;margin-top:8px}
+.btn{width:100%;background:#FFC600;border:none;padding:14px;border-radius:12px;font-weight:900;margin-top:10px}
+.btn-scan{background:#000;color:#FFC600;font-size:16px;padding:16px}
+.scan-line{position:absolute;top:50%;left:10%;right:10%;height:3px;background:#FFC600;box-shadow:0 0 10px #FFC600;animation:scan 2s infinite;z-index:5}
+@keyframes scan{0%{top:20%}50%{top:80%}100%{top:20%}}
+.corners{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+.corner{position:absolute;width:40px;height:40px;border:4px solid #FFC600}
+.c1{top:15%;left:10%;border-right:0;border-bottom:0}
+.c2{top:15%;right:10%;border-left:0;border-bottom:0}
+.c3{bottom:15%;left:10%;border-right:0;border-top:0}
+.c4{bottom:15%;right:10%;border-left:0;border-top:0}
+</style></head><body>
+<div class="phone">
+<div class="header"><h2 style="margin:0">RAFTA QR SCANNER</h2><small>Google Pay jaisa fast scan</small></div>
+
+<div id="reader">
+<div class="scan-line"></div>
+<div class="corners"><div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div></div>
+</div>
+
+<div style="background:#000;color:#fff;text-align:center;padding:8px;font-size:12px" id="status">📷 Camera ready hai... QR ko beech me lao</div>
+
+<div class="card">
+<label>QR ID * Auto Scan Hoga</label><input id="qr" placeholder="Scan hote hi yaha ayega" style="background:#fffde7;font-weight:bold;border:2px solid #FFC600">
+<label>Vehicle No *</label><input id="vehicle" placeholder="BR01AB1234">
+<label>Mobile No *</label><input id="mobile" placeholder="9876543210" type="tel">
+<label>Kaam *</label><select id="work"><option value="">Select Karo</option><option>Agent</option><option>Doctor</option><option>Business</option><option>Teacher</option><option>Driver</option><option>Other</option></select>
+<label>WhatsApp No *</label><input id="wano" placeholder="9876543210" type="tel">
+<button class="btn" onclick="activate()">⚡ ACTIVATE KARO</button>
+<div id="res"></div>
+</div>
+<div id="list"></div>
+</div>
+
+<script>
+let db=JSON.parse(localStorage.getItem('rafta_final')||'{}');
+let html5QrCode;
+let lastScan="";
+
+function onScanSuccess(decodedText, decodedResult) {
+    if(decodedText===lastScan) return;
+    lastScan=decodedText;
+    console.log("SCAN:",decodedText);
+
+    // QR se ID nikalo
+    let id=decodedText;
+    try{
+        let url=new URL(decodedText);
+        id=url.searchParams.get('qr')||url.searchParams.get('id')||decodedText;
+    }catch(e){}
+    // RAFTA pattern nikalo
+    let m=id.toString().match(/RAFTA[0-9]+|Br[0-9]+|[A-Z0-9]{4,}/i);
+    if(m) id=m[0].toUpperCase();
+    id=id.trim().substring(0,20);
+
+    document.getElementById('qr').value=id;
+    document.getElementById('status').innerHTML="✅ SCAN HO GAYA: "+id+" - Neeche details bharo";
+    document.getElementById('status').style.background="#22c55e";
+
+    // Vibrate
+    if(navigator.vibrate) navigator.vibrate(200);
+
+    // Beep sound
+    let audio=new Audio('data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZQAAABkY29tZ2NvbW1lbnQ=');
+    audio.play().catch(()=>{});
+}
+
+function startScanner(){
+    html5QrCode=new Html5Qrcode("reader");
+    let config={
+        fps: 30,
+        qrbox: {width: 280, height: 280},
+        aspectRatio: 1.0,
+        disableFlip: false,
+        experimentalFeatures: {useBarCodeDetectorIfSupported: true},
+        formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+    };
+    html5QrCode.start(
+        {facingMode: "environment"},
+        config,
+        onScanSuccess,
+        (err)=>{ /* ignore scan errors */ }
+    ).catch(err=>{
+        document.getElementById('status').innerHTML="❌ Camera Error: "+err+" - Chrome me Allow karo";
+    });
+}
+
+// Auto start
+startScanner();
+
+function activate(){
+    let q=qr.value.toUpperCase().trim(),v=vehicle.value.trim(),m=mobile.value.replace(/\D/g,'').slice(-10),w=work.value.trim(),wa=wano.value.replace(/\D/g,'').slice(-10);
+    if(!q||!v||!m||!w||!wa){alert('Sab bharo bhai');return;}
+    let link=`https://wa.me/91${wa}?text=Namaste! Gaadi ${encodeURIComponent(v)} (${q}) parking issue. Owner: ${m} (${w}) - RAFTA`;
+    db[q]={vehicle:v,mobile:m,work:w,whatsapp:wa,waLink:link,time:Date.now()};
+    localStorage.setItem('rafta_final',JSON.stringify(db));
+    localStorage.setItem('rafta',JSON.stringify(db));
+    res.innerHTML=`<div style="background:#d1fae5;padding:12px;border-radius:12px;margin-top:12px;text-align:center"><b>✅ ${q} ACTIVE!</b><br><a href="index.html?qr=${q}" target="_blank" style="background:#000;color:#FFC600;padding:8px 14px;border-radius:8px;text-decoration:none;display:inline-block;margin-top:6px">TEST SCAN</a></div>`;
+    // Reset for next scan
+    lastScan="";
+    document.getElementById('status').innerHTML="📷 Next QR lao...";
+    document.getElementById('status').style.background="#000";
+}
+</script>
+</body></html>
