@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sampark Bihar</title>
+<style>
+body{font-family:sans-serif; text-align:center; padding:15px; background:#FFF9C4}
+.box{background:white; padding:20px; border-radius:20px; border:2px solid black; margin-top:20px}
+input{width:90%; padding:12px; margin:8px; border-radius:10px; border:1px solid #ccc}
+button{background:black; color:#FFEB3B; padding:15px 30px; border:none; border-radius:12px; font-size:18px; font-weight:bold}
+</style>
+</head>
+<body>
+<h2>🚗 Sampark Bihar</h2>
+<p>Aapki Gaadi Ab Bol Sakti Hai - FREE QR</p>
+<div class="box">
+<input id="qr" placeholder="QR ID - Ex: SM0001"><br>
+<input id="car" placeholder="Gaadi Number - BR33 AB 1234"><br>
+<input id="phone" placeholder="Aapka WhatsApp Number"><br><br>
+<button onclick="activate()">FREE ME ACTIVATE KARO</button>
+<div id="result" style="margin-top:20px"></div>
+</div>
+<script>
+function activate(){
+let qr=document.getElementById('qr').value;
+let car=document.getElementById('car').value;
+let phone=document.getElementById('phone').value;
+let link="https://wa.me/91"+phone+"?text=Namaste! Aapki Gaadi "+car+" (QR:"+qr+") parking me problem kar rahi hai, please dekhe.";
+document.getElementById('result').innerHTML="<b style='color:green'>✅ QR Active!</b><br><br>Is Link ka QR banao:<br><a href='"+link+"' target='_blank' style='word-break:break-all'>"+link+"</a><br><br><p>Ab is link ko QR me badal ke sticker pe lagao</p>";
+}
+</script>
+</body>
+</html>
