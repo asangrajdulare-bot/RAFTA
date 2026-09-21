@@ -1,44 +1,24 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAFTA Admin - GPay Style</title><script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><style>
-*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:#000;display:flex;justify-content:center}.phone{max-width:420px;width:100%;background:#0f0f0f;min-height:100vh;position:relative}
-#reader{width:100%;height:50vh;background:#000;position:relative;overflow:hidden}#reader video{object-fit:cover!important}
-.frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:66%;height:66%;z-index:2}.corner{position:absolute;width:28px;height:28px;border-color:#fff;border-style:solid}.tl{top:0;left:0;border-width:4px 0 0 4px}.tr{top:0;right:0;border-width:4px 4px 0 0}.bl{bottom:0;left:0;border-width:0 0 4px 4px}.br{bottom:0;right:0;border-width:0 4px 4px 0}.line{position:absolute;width:100%;height:3px;background:#FF3B30;animation:sc 2s linear infinite}@keyframes sc{0%{top:0}100%{top:100%}}
-.sts{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.8);color:#fff;text-align:center;padding:8px;font-size:12px;z-index:5}
-.card{background:#f6f5ef;border-radius:28px 28px 0 0;margin-top:-22px;position:relative;z-index:6;padding:20px}
-label{font-size:11px;font-weight:800;margin:11px 0 4px 4px;display:block;color:#111}input,select{width:100%;padding:13px;border-radius:12px;border:1.5px solid #e5e5e5;background:#fff;font-size:14px}
-input:focus,select:focus{outline:none;border-color:#FFC600;background:#fffde7}
-.qr{border-color:#FFC600!important;background:#fffde7!important;font-weight:800}
-.btn{width:100%;border:none;padding:15px;border-radius:14px;font-weight:900;margin-top:14px;font-size:14px}.btn-y{background:#FFC600;color:#000}.btn-b{background:#000;color:#FFC600;padding:8px 18px;border-radius:8px;font-size:13px}
-.ok{background:#d1fae5;border:1px solid #6ee7b7;border-radius:14px;padding:14px;text-align:center;margin-top:14px}
-</style></head><body><div class="phone">
-<div id="reader"><div class="frame"><div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div><div class="line"></div></div><div class="sts" id="sts">📷 QR ko beech me lao - Auto Scan Hoga</div></div>
-<div class="card">
-<label>QR ID * Auto Scan Hoga</label><input id="qr" class="qr" placeholder="Scan hote hi ayega">
-<label>Owner Name *</label><input id="owner" placeholder="Ramesh Kumar">
-<label>Vehicle No *</label><input id="vehicle" placeholder="BR01AB1234">
-<label>Mobile No *</label><input id="mobile" type="tel" placeholder="Call wala number">
-<label>Kaam *</label><select id="prof"><option value="">Select Kaam</option><option>Driver</option><option>Business</option><option>Doctor</option><option>Teacher</option><option>Farmer</option><option>Student</option><option>Government Job</option><option>Private Job</option><option>Other</option></select>
-<label>WhatsApp No *</label><input id="wano" type="tel" placeholder="WhatsApp wala number">
-<button class="btn btn-y" onclick="activate()">ACTIVATE KARO</button>
-<div id="res"></div>
-</div></div>
-<script>
-// ==== TUMHARA FREE CLOUD LINK - EK BAAR BANANA HAI ====
-const API = "https://crudcrud.com/api/REPLACE_WITH_YOUR_ID/rafta"; // yahan apna crudcrud link paste karo
-
-let last="";function onScan(t){if(t===last)return;last=t;let id=t;try{let u=new URL(t);id=u.searchParams.get('qr')||t}catch(e){}id=id.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,15);document.getElementById('qr').value=id;let s=document.getElementById('sts');s.innerHTML="✅ SCAN HO GAYA: "+id+" - Vibrate!";s.style.background="#16a34a";if(navigator.vibrate)navigator.vibrate([200,100,200]);}
-let h=new Html5Qrcode("reader");h.start({facingMode:"environment"},{fps:30,qrbox:270},onScan,()=>{}).catch(e=>{sts.innerHTML="Camera allow karo"});
-
-async function activate(){
-let q=qr.value.toUpperCase().trim(),own=owner.value.trim(),v=vehicle.value.toUpperCase().trim(),pr=prof.value,mo=mobile.value.replace(/\D/g,'').slice(-10),wa=wano.value.replace(/\D/g,'').slice(-10);
-if(!q||!own||!v||!pr||!mo||!wa){alert("Sab details bharo bhai");return}
-res.innerHTML="⏳ GPay jaisa Activate ho raha hai... QR wahi rahega...";
-try{
-let all=await fetch(API).then(r=>r.json()).catch(()=>[]);
-let found=all.find(x=>x.qr==q);
-let data={qr:q,owner:own,vehicle:v,profession:pr,mobile:mo,whatsapp:wa};
-if(found){await fetch(API+"/"+found._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})}
-else{await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})}
-res.innerHTML=`<div class="ok"><b>✅ ${q} ACTIVE!</b><br><small>QR wahi hai, details jud gaya!</small><br><div style="margin-top:10px"><a href="index.html?qr=${q}" target="_blank"><button class="btn-b">TEST SCAN</button></a></div><small style="display:block;margin-top:8px">Ab koi bhi ${q} scan karega toh RAFTA khulega</small></div>`;
-}catch(e){res.innerHTML=`❌ Error: CrudCrud link expire ho gaya! crudcrud.com kholo, naya link copy karke API me paste karo.<br><small>${e.message}</small>`}
-}
-</script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAFTA ADMIN QR ACTIVATE</title><script src="https://unpkg.com/html5-qrcode"></script>
+<style>body{background:#f5f7fb;font-family:system-ui}.header{background:#0b1220;color:#fff;padding:14px;display:flex;justify-content:space-between}
+.logo{width:36px;height:36px;background:#ffcc00;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900}
+.card{background:#fff;margin:12px;border-radius:16px;padding:16px}.input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-bottom:10px}
+.btn{width:100%;padding:12px;background:#111;color:#fff;border-radius:10px;border:none;font-weight:700}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #eee}
+#login{position:fixed;inset:0;background:#0b1220;display:flex;align-items:center;justify-content:center;z-index:99}
+.loginBox{background:#fff;padding:24px;border-radius:20px;width:90%;max-width:360px;text-align:center}
+</style></head><body>
+<div id="login"><div class="loginBox"><div style="display:flex;justify-content:space-between"><div class="logo">R</div><b>RAFTA</b></div>
+<h1 style="font-size:32px;font-weight:900;margin:12px 0">RAFTA</h1><p>RAFTA ADMIN QR ACTIVATE</p>
+<input id="uid" class="input" placeholder="User ID"><input id="pwd" type="password" class="input" placeholder="Password">
+<button class="btn" onclick="if(uid.value=='RAFTAADMIN'&&pwd.value==localStorage.getItem('rafta_pwd')||'RAFTA@2026'){login.style.display='none'}else alert('Wrong')">LOGIN</button>
+<p style="font-size:11px;color:#888;margin-top:8px">ID: RAFTAADMIN | Pass: RAFTA@2026</p></div></div>
+<div class="header"><div style="display:flex;gap:8px;align-items:center"><div class="logo">R</div><div><b>RAFTA QR ADMIN</b><br><small style="opacity:.7">Dynamic QR Activator</small></div></div>
+<div onclick="login.style.display='flex'">Logout</div></div>
+<div class="card"><h3>Activate New QR</h3><div style="display:flex;gap:6px"><input id="qr" class="input" placeholder="RAFTA001"><button class="btn" style="width:80px" onclick="new Html5Qrcode('reader').start({facingMode:'environment'},{fps:10,qrbox:250},t=>{qr.value=t.split('qr=')[1]||t;reader.innerHTML=''})">SCAN</button></div>
+<div id="reader"></div><input id="car" class="input" placeholder="Car Number"><input id="wa" class="input" placeholder="WhatsApp +91">
+<button class="btn" onclick="let db=JSON.parse(localStorage.getItem('rafta_db')||'{}');db[qr.value.toUpperCase()]={car:car.value,wa:wa.value,time:new Date().toLocaleString()};localStorage.setItem('rafta_db',JSON.stringify(db));alert(qr.value+' Activated');location.reload()">ACTIVATE</button>
+<p style="font-size:11px;color:#888">Same ID se dobara Active = Naya QR Replace</p></div>
+<div class="card"><h3>Activated QRs</h3><div id="list"></div></div>
+<script>let db=JSON.parse(localStorage.getItem('rafta_db')||'{}');let l=document.getElementById('list');Object.keys(db).forEach(k=>{l.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><b>${k}</b><span>${db[k].car}</span></div>`})</script>
+</body></html>
