@@ -1,24 +1,93 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RAFTA ADMIN QR ACTIVATE</title><script src="https://unpkg.com/html5-qrcode"></script>
-<style>body{background:#f5f7fb;font-family:system-ui}.header{background:#0b1220;color:#fff;padding:14px;display:flex;justify-content:space-between}
-.logo{width:36px;height:36px;background:#ffcc00;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900}
-.card{background:#fff;margin:12px;border-radius:16px;padding:16px}.input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-bottom:10px}
-.btn{width:100%;padding:12px;background:#111;color:#fff;border-radius:10px;border:none;font-weight:700}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #eee}
-#login{position:fixed;inset:0;background:#0b1220;display:flex;align-items:center;justify-content:center;z-index:99}
-.loginBox{background:#fff;padding:24px;border-radius:20px;width:90%;max-width:360px;text-align:center}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAFTA ADMIN QR ACTIVATE</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#f4f5f7} :root{--yellow:#ffcc00;--black:#0b1220}
+.header{background:var(--black);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:3px solid var(--yellow)}
+.logo-box{width:40px;height:40px;background:var(--yellow);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:20px;color:#000}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}
+.stat{background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);border-left:4px solid var(--yellow)}
+.card{background:#fff;margin:0 16px 16px 16px;border-radius:18px;padding:18px}
+.input{width:100%;padding:13px;border:1.5px solid #e5e7eb;border-radius:12px;margin-bottom:10px;outline:none}
+.btn{width:100%;padding:13px;background:var(--black);color:#fff;border:none;border-radius:12px;font-weight:800}
+.btn-yellow{background:var(--yellow);color:#000}
+.qr-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee;cursor:pointer}
+.badge{background:#eaffea;color:#0a7a0a;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:8px 0 14px 0}
+.nav-item{font-size:11px;text-align:center;color:#888;flex:1}.nav-item.active{color:var(--black);font-weight:800}
+.page{display:none;padding-bottom:100px}.page.active{display:block}
+#reader{display:none;margin-bottom:10px}
+#loginPage{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.login-card{background:#fff;width:100%;max-width:380px;border-radius:24px;padding:28px;border:3px solid var(--yellow)}
+.login-big{font-family:'Anton',sans-serif;font-size:42px;text-align:center;letter-spacing:2px;margin:14px 0 2px 0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modalBox{background:#fff;border-radius:18px;padding:20px;width:100%;max-width:340px}
 </style></head><body>
-<div id="login"><div class="loginBox"><div style="display:flex;justify-content:space-between"><div class="logo">R</div><b>RAFTA</b></div>
-<h1 style="font-size:32px;font-weight:900;margin:12px 0">RAFTA</h1><p>RAFTA ADMIN QR ACTIVATE</p>
-<input id="uid" class="input" placeholder="User ID"><input id="pwd" type="password" class="input" placeholder="Password">
-<button class="btn" onclick="if(uid.value=='RAFTAADMIN'&&pwd.value==localStorage.getItem('rafta_pwd')||'RAFTA@2026'){login.style.display='none'}else alert('Wrong')">LOGIN</button>
-<p style="font-size:11px;color:#888;margin-top:8px">ID: RAFTAADMIN | Pass: RAFTA@2026</p></div></div>
-<div class="header"><div style="display:flex;gap:8px;align-items:center"><div class="logo">R</div><div><b>RAFTA QR ADMIN</b><br><small style="opacity:.7">Dynamic QR Activator</small></div></div>
-<div onclick="login.style.display='flex'">Logout</div></div>
-<div class="card"><h3>Activate New QR</h3><div style="display:flex;gap:6px"><input id="qr" class="input" placeholder="RAFTA001"><button class="btn" style="width:80px" onclick="new Html5Qrcode('reader').start({facingMode:'environment'},{fps:10,qrbox:250},t=>{qr.value=t.split('qr=')[1]||t;reader.innerHTML=''})">SCAN</button></div>
-<div id="reader"></div><input id="car" class="input" placeholder="Car Number"><input id="wa" class="input" placeholder="WhatsApp +91">
-<button class="btn" onclick="let db=JSON.parse(localStorage.getItem('rafta_db')||'{}');db[qr.value.toUpperCase()]={car:car.value,wa:wa.value,time:new Date().toLocaleString()};localStorage.setItem('rafta_db',JSON.stringify(db));alert(qr.value+' Activated');location.reload()">ACTIVATE</button>
-<p style="font-size:11px;color:#888">Same ID se dobara Active = Naya QR Replace</p></div>
-<div class="card"><h3>Activated QRs</h3><div id="list"></div></div>
-<script>let db=JSON.parse(localStorage.getItem('rafta_db')||'{}');let l=document.getElementById('list');Object.keys(db).forEach(k=>{l.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><b>${k}</b><span>${db[k].car}</span></div>`})</script>
-</body></html>
+<div id="loginPage"><div class="login-card">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="width:46px;height:46px;background:#ffcc00;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:22px">R</div><div style="font-family:'Anton',sans-serif;font-size:12px">RAFTA</div></div>
+<div class="login-big">RAFTA</div>
+<p style="text-align:center;font-size:12px;font-weight:800;color:#666;letter-spacing:1px;margin-bottom:18px">RAFTA ADMIN QR ACTIVATE</p>
+<input id="uid" class="input" placeholder="User ID - RAFTAADMIN">
+<input id="pwd" class="input" type="password" placeholder="Password - RAFTA@2026">
+<button class="btn" onclick="doLogin()">LOGIN</button>
+<p style="text-align:center;font-size:10px;color:#888;margin-top:10px">ID: RAFTAADMIN | Pass: RAFTA@2026</p>
+</div></div>
+
+<div class="header"><div style="display:flex;gap:10px;align-items:center"><div class="logo-box">R</div><div><div style="font-family:'Anton',sans-serif;font-size:14px;letter-spacing:1px">RAFTA ADMIN QR ACTIVATE</div><div style="font-size:9px;opacity:.7">BLACK YELLOW WHITE • DYNAMIC</div></div></div><div style="background:#ffcc00;color:#000;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:800" onclick="logout()">LOGOUT</div></div>
+
+<div id="homePage" class="page active">
+<div class="stats"><div class="stat"><div style="font-size:11px;color:#888;font-weight:700">TOTAL ACTIVATED</div><div style="font-size:22px;font-weight:900" id="totalCount">0 QRs</div></div><div class="stat"><div style="font-size:11px;color:#888;font-weight:700">TODAY ACTIVATED</div><div style="font-size:22px;font-weight:900" id="todayCount">+0</div></div></div>
+<div class="card"><h2>Activate New QR</h2>
+<div style="display:flex;gap:8px"><input id="qrId" class="input" placeholder="QR ID e.g. RAFTA001"><button class="btn btn-yellow" style="width:110px" onclick="openScanner()">SCAN</button></div>
+<div id="reader"></div>
+<input id="carNo" class="input" placeholder="Car Number e.g. BR01AB1234"><input id="waNo" class="input" placeholder="WhatsApp +91">
+<button class="btn" onclick="activateQR()">ACTIVATE</button>
+<p style="font-size:11px;color:#666;margin-top:8px;background:#fff8cc;padding:8px;border-radius:8px;border:1px dashed #ffcc00">♻️ Re-Active: RAFTA001 kharab/fat gaya? Naya QR same RAFTA001 se print karke fir se ACTIVE dabao - auto replace!</p></div>
+<div class="card"><h2>Activated QRs</h2><div id="listHome"></div></div>
+</div>
+
+<div id="listePage" class="page"><div class="card"><h2>Liste - All RAFTA Numbers</h2><input id="searchListe" class="input" placeholder="Search RAFTA001 / BR01..." oninput="renderListe()"><div id="listeFull"></div></div></div>
+<div id="historyPage" class="page"><div class="card"><h2>History</h2><div id="historyList"></div></div></div>
+<div id="profilePage" class="page"><div class="card" style="text-align:center;border:2px solid #ffcc00">
+<div style="width:80px;height:80px;background:#ffcc00;border-radius:20px;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:32px;margin:0 auto 12px">R</div>
+<h2 style="font-family:'Anton',sans-serif;font-size:36px">RAFTA</h2><p style="font-size:12px;font-weight:800;color:#666">RAFTA ADMIN QR ACTIVATE</p><p style="margin-top:10px;font-weight:700">Founder: Asang Raj Dulare</p><hr style="margin:18px 0;border:none;border-top:1px solid #eee">
+<h3 style="text-align:left;font-size:13px;margin-bottom:10px">Password Change</h3><input id="oldPwd" class="input" type="password" placeholder="Old Password"><input id="newPwd" class="input" type="password" placeholder="New Password"><button class="btn btn-yellow" onclick="changePwd()">UPDATE PASSWORD</button>
+</div></div>
+
+<div class="bottom-nav">
+<div class="nav-item active" onclick="switchTab('home',this)">🏠<br>Home</div>
+<div class="nav-item" onclick="switchTab('liste',this)">📋<br>Liste</div>
+<div class="nav-item" onclick="switchTab('history',this)">🕒<br>History</div>
+<div class="nav-item" onclick="switchTab('profile',this)">👤<br>Profile</div>
+</div>
+
+<div id="detailModal" class="modal" onclick="this.style.display='none'"><div class="modalBox" onclick="event.stopPropagation()">
+<h3 id="mQr" style="font-family:'Anton',sans-serif;font-size:22px"></h3>
+<div style="line-height:1.8;font-size:14px;margin-top:10px"><b>Car:</b> <span id="mCar"></span><br><b>WA:</b> <span id="mWa"></span><br><b>Time:</b> <span id="mTime"></span><br><b>Link:</b><br><small id="mLink" style="color:#0a7a0a;word-break:break-all"></small></div>
+<div style="display:flex;gap:8px;margin-top:14px"><a id="mCall" class="btn" style="text-align:center;text-decoration:none">CALL</a><a id="mWaBtn" class="btn btn-yellow" style="text-align:center;text-decoration:none">WHATSAPP</a></div>
+<button class="btn" style="margin-top:8px;background:#fff;color:#111;border:1px solid #ddd" onclick="detailModal.style.display='none'">CLOSE</button>
+</div></div>
+
+<script>
+let db=JSON.parse(localStorage.getItem('rafta_db')||'{}');
+let creds=JSON.parse(localStorage.getItem('rafta_creds')||'{"uid":"RAFTAADMIN","pwd":"RAFTA@2026"}');
+let todayLog=JSON.parse(localStorage.getItem('rafta_today')||'{"date":"'+new Date().toDateString()+'","count":0}');
+if(todayLog.date!==new Date().toDateString())todayLog={date:new Date().toDateString(),count:0};
+function save(){localStorage.setItem('rafta_db',JSON.stringify(db));localStorage.setItem('rafta_today',JSON.stringify(todayLog));render();}
+function doLogin(){let u=uid.value.trim()||'RAFTAADMIN';let p=pwd.value.trim();if(u===creds.uid&&p===creds.pwd)loginPage.style.display='none';else alert('Wrong! ID:'+creds.uid+' Pass:'+creds.pwd)}
+function logout(){loginPage.style.display='flex'}
+function switchTab(n,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(n+'Page').classList.add('active');document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));el.classList.add('active');if(n==='liste')renderListe();if(n==='history')renderHistory()}
+let html5Qr;function openScanner(){reader.style.display='block';html5Qr=new Html5Qrcode('reader');html5Qr.start({facingMode:'environment'},{fps:10,qrbox:250},txt=>{let id=(txt.split('qr=')[1]||txt).trim().toUpperCase().split('?')[0].split('/').pop();if(!id.startsWith('RAFTA'))id='RAFTA'+id.replace(/[^0-9]/g,'').padStart(3,'0');qrId.value=id;html5Qr.stop();reader.style.display='none';});}
+function activateQR(){let q=qrId.value.trim().toUpperCase();let car=carNo.value.trim().toUpperCase();let wa=waNo.value.trim();if(!q||!car||!wa){alert('Sab bharo');return;}if(!q.startsWith('RAFTA'))q='RAFTA'+q.replace(/[^0-9]/g,'').padStart(3,'0');let isUpdate=!!db[q];db[q]={car,wa,time:new Date().toLocaleString(),ts:Date.now()};if(!isUpdate)todayLog.count++;save();qrId.value='';carNo.value='';waNo.value='';alert(q+(isUpdate?' Re-Activated!':' Activated!'))}
+function render(){totalCount.innerText=Object.keys(db).length+' QRs';todayCount.innerText='+'+todayLog.count+' Activated';listHome.innerHTML='';Object.keys(db).sort((a,b)=>db[b].ts-db[a].ts).forEach(k=>{listHome.innerHTML+=`<div class="qr-item" onclick="showDetail('${k}')"><div><b>${k}</b><br><small>${db[k].car}</small></div><div class="badge">Active</div></div>`});}
+function renderListe(){let f=searchListe.value.toUpperCase();listeFull.innerHTML='';Object.keys(db).sort().filter(k=>k.includes(f)||db[k].car.includes(f)).forEach(k=>{listeFull.innerHTML+=`<div class="qr-item" onclick="showDetail('${k}')"><div><b>${k}</b><br><small>${db[k].car} • ${db[k].wa}</small></div><div>›</div></div>`});}
+function renderHistory(){historyList.innerHTML='';Object.keys(db).sort((a,b)=>db[b].ts-db[a].ts).forEach(k=>{historyList.innerHTML+=`<div class="qr-item" onclick="showDetail('${k}')"><div><b>${k}</b><br><small>${db[k].time}</small></div><small>${db[k].car}</small></div>`});}
+function showDetail(k){let d=db[k];mQr.innerText=k;mCar.innerText=d.car;mWa.innerText=d.wa;mTime.innerText=d.time;mLink.innerText=location.origin+location.pathname.replace('admin.html','')+'?qr='+k;mCall.href='tel:'+d.wa;mWaBtn.href='https://wa.me/'+d.wa.replace(/\D/g,'');detailModal.style.display='flex';}
+function changePwd(){let o=oldPwd.value.trim();let n=newPwd.value.trim();if(o!==creds.pwd){alert('Old galat');return;}if(n.length<4){alert('Chhota');return;}creds.pwd=n;localStorage.setItem('rafta_creds',JSON.stringify(creds));alert('Updated: '+n);oldPwd.value='';newPwd.value='';}
+render();
+</script></body></html>
