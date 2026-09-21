@@ -1,9 +1,4 @@
 {
-  "BR001": {
-    "owner": "Demo Owner",
-    "vehicle": "BR01AB1234",
-    "profession": "Business",
-    "mobile": "9876543210",
-    "whatsapp": "9876543210"
-  }
+  "RAFTA001": {"car": "BR01AB1234", "wa": "+919999999999"},
+  "RAFTA002": {"car": "BR02CD5678", "wa": "+918888888888"}
 }
