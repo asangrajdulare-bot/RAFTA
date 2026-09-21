@@ -1,18 +1,74 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RAFTA PUBLIC HELP</title>
-<style>body{margin:0;font-family:system-ui;background:#fff}.top{background:#0b1220;color:#fff;padding:12px;display:flex;justify-content:space-between}
-.logo{width:36px;height:36px;background:#ffcc00;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900}
-.hero{background:linear-gradient(#0b1220,#1a2640);color:#fff;text-align:center;padding:20px;border-radius:0 0 24px 24px}
-.hero h1{font-size:36px;font-weight:900}.hero span{color:#ffcc00}.tag{background:#ffcc00;color:#000;padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px;display:inline-block;margin-top:8px}
-.card{margin:16px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.btn{display:block;padding:12px;text-align:center;border-radius:12px;text-decoration:none;font-weight:800;margin-top:10px}
-.call{background:#111;color:#fff}.wa{background:#25D366;color:#fff}</style></head><body>
-<div class="top"><div class="logo">R</div><b style="font-size:20px">RAFTA</b><div style="width:36px"></div></div>
-<div class="hero"><h1>RAF<span>TA</span></h1><div class="tag">Parking ka Tension Khatam, RAFTA Hai Na!</div></div>
-<div class="card"><small>QR ID</small><h2 id="qid">RAFTA001</h2><small>CAR NUMBER</small><h2 id="car">Loading...</h2>
-<a id="cbtn" class="btn call">CALL OWNER</a><a id="wbtn" class="btn wa">WHATSAPP OWNER</a></div>
-<div class="card"><small>IS QR SE KITNI PROBLEM SOLVE</small><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-<div>✓ Wrong Parking Band</div><div>✓ Direct Connect</div><div>✓ Smart QR</div><div>✓ 24/7 Help</div></div></div>
-<script>let q=new URLSearchParams(location.search).get('qr')||'RAFTA001';document.getElementById('qid').innerText=q;
-let db=JSON.parse(localStorage.getItem('rafta_db')||'{}');if(db[q]){document.getElementById('car').innerText=db[q].car;cbtn.href='tel:'+db[q].wa;wbtn.href='https://wa.me/'+db[q].wa.replace(/\D/g,'')}</script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#fff;color:#111}
+.top{background:#0b1220;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:3px solid #ffcc00}
+.logo{width:40px;height:40px;background:#ffcc00;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#000;font-family:'Anton',sans-serif;font-size:20px}
+.hero{padding:22px 18px;text-align:center;background:linear-gradient(180deg,#0b1220 0%,#1a2640 100%);color:#fff;border-radius:0 0 28px 28px}
+.hero h1{font-size:44px;font-family:'Anton',sans-serif;letter-spacing:3px}
+.hero h1 span{color:#ffcc00}
+.tag{margin-top:10px;background:#ffcc00;color:#000;display:inline-block;padding:7px 16px;border-radius:20px;font-weight:900;font-size:12px}
+.card{background:#fff;margin:16px;border-radius:20px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.08);border:1px solid #f0f0f0}
+.btn{display:block;width:100%;padding:14px;border-radius:14px;text-align:center;font-weight:800;text-decoration:none;margin-top:10px}
+.btn-call{background:#0b1220;color:#fff;border:2px solid #ffcc00}
+.btn-wa{background:#25D366;color:#fff}
+.feat{background:#f8f9fb;border-radius:12px;padding:10px;font-size:11px;font-weight:700;border-left:3px solid #ffcc00}
+</style></head><body>
+<div class="top"><div class="logo">R</div><div style="font-family:'Anton',sans-serif;font-size:20px;letter-spacing:2px">RAFTA</div><div style="width:40px"></div></div>
+
+<div class="hero">
+<h1>RAF<span>TA</span></h1>
+<div class="tag">Parking ka Tension Khatam, RAFTA Hai Na!</div>
+<p style="margin-top:10px;font-size:11px;opacity:.8;letter-spacing:1px">RAFTA PUBLIC HELP • DYNAMIC QR SYSTEM</p>
+</div>
+
+<div class="card" id="qrCard">
+<div style="font-size:10px;color:#888;font-weight:800;letter-spacing:1px">QR ID</div>
+<div style="font-size:20px;font-weight:900" id="qrId">RAFTA001</div>
+<div style="margin-top:14px;font-size:10px;color:#888;font-weight:800">CAR NUMBER</div>
+<div style="font-size:20px;font-weight:900" id="carNo">Loading...</div>
+<div style="margin-top:14px;font-size:10px;color:#888;font-weight:800">STATUS</div>
+<div style="font-weight:900;color:#0a7a0a">● Active & Protected by RAFTA</div>
+<a id="callBtn" class="btn btn-call" href="#">📞 CALL OWNER</a>
+<a id="waBtn" class="btn btn-wa" href="#">💬 WHATSAPP OWNER</a>
+<p style="margin-top:10px;font-size:10px;color:#888;text-align:center">Owner detail privacy - Direct connect via RAFTA</p>
+</div>
+
+<div class="card">
+<div style="font-size:11px;color:#888;font-weight:800;letter-spacing:1px">IS QR SE KITNI PROBLEM SOLVE HO RAHI HAI</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+<div class="feat">✓ Wrong Parking Call Band</div>
+<div class="feat">✓ Direct Owner Connect</div>
+<div class="feat">✓ No Paper - Smart QR</div>
+<div class="feat">✓ 24/7 Help Available</div>
+<div class="feat">✓ Bihar ka Apna Startup</div>
+<div class="feat">✓ 100% Safe & Secure</div>
+</div>
+</div>
+
+<div style="padding:16px;text-align:center;font-size:11px;color:#999">RAFTA PUBLIC HELP • Yellow-Black Unique • Founder Asang Raj Dulare<br>Parking ka Tension Khatam, RAFTA Hai Na!</div>
+
+<script>
+async function load(){
+let q=(new URLSearchParams(location.search).get('qr')||'RAFTA001').toUpperCase();
+document.getElementById('qrId').innerText=q;
+let db={};
+try{let r=await fetch('data.json?v='+Date.now()); db=await r.json();}catch(e){}
+let local=JSON.parse(localStorage.getItem('rafta_db')||'{}');
+db={...db,...local};
+if(db[q]){
+document.getElementById('carNo').innerText=db[q].car;
+document.getElementById('callBtn').href='tel:'+db[q].wa;
+document.getElementById('waBtn').href='https://wa.me/'+(db[q].wa||'').replace(/[^0-9]/g,'')+'?text=Hi, your car '+db[q].car+' RAFTA QR '+q;
+}else{
+document.getElementById('carNo').innerText='Not Activated Yet / Demo BR01AB1234';
+}
+}
+load();
+</script>
 </body></html>
